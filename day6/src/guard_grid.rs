@@ -25,7 +25,7 @@ const GUARD_LEFT: char = '<';
 const GUARD_RIGHT: char = '>';
 
 pub struct GuardGrid {
-    grid: Grid,
+    grid: Grid<char>,
     pub guard_position: Coordinate,
     pub guard_direction: GridDirection,
     guard_is_on_grid: bool,
@@ -132,7 +132,7 @@ impl GuardGrid {
         // 3. Check if those coordinates are blocked. If they are, turn right
         let next_cell = self.grid.get(&next_coords).unwrap();
 
-        if next_cell == '#' {
+        if *next_cell == '#' {
             self.guard_direction = match self.guard_direction {
                 GridDirection::Up => GridDirection::Right,
                 GridDirection::Down => GridDirection::Left,
@@ -149,21 +149,19 @@ impl GuardGrid {
     }
 
     pub fn reset(&mut self, guard_position: Coordinate, guard_direction: GridDirection) {
-        // let (guard_position, guard_direction) = Self::find_guard_pos_and_dir(&self.grid);
-
         self.guard_position = guard_position;
         self.guard_direction = guard_direction;
         self.guard_is_on_grid = true;
     }
 
-    fn find_guard_pos_and_dir(grid: &Grid) -> (Coordinate, GridDirection) {
-        if let Some(coords) = grid.find(GUARD_UP).get(0) {
+    fn find_guard_pos_and_dir(grid: &Grid<char>) -> (Coordinate, GridDirection) {
+        if let Some(coords) = grid.find(&GUARD_UP).get(0) {
             (coords.clone(), GridDirection::Up)
-        } else if let Some(coords) = grid.find(GUARD_DOWN).get(0) {
+        } else if let Some(coords) = grid.find(&GUARD_DOWN).get(0) {
             (coords.clone(), GridDirection::Down)
-        } else if let Some(coords) = grid.find(GUARD_LEFT).get(0) {
+        } else if let Some(coords) = grid.find(&GUARD_LEFT).get(0) {
             (coords.clone(), GridDirection::Left)
-        } else if let Some(coords) = grid.find(GUARD_RIGHT).get(0) {
+        } else if let Some(coords) = grid.find(&GUARD_RIGHT).get(0) {
             (coords.clone(), GridDirection::Right)
         } else {
             panic!("Guard not found in grid");
