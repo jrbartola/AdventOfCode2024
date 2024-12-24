@@ -93,4 +93,26 @@ impl<T: PartialEq<T>> Grid<T> {
                 .map(move |(col_idx, cell)| (Coordinate(row_idx, col_idx), cell))
         })
     }
+
+    pub fn get_adjacent(&self, coordinate: &Coordinate) -> Vec<Coordinate> {
+        let mut adjacents = Vec::new();
+
+        if coordinate.0 > 0 {
+            adjacents.push(Coordinate(coordinate.0 - 1, coordinate.1));
+        }
+
+        if coordinate.1 > 0 {
+            adjacents.push(Coordinate(coordinate.0, coordinate.1 - 1));
+        }
+
+        if coordinate.0 < self.row_len() - 1 {
+            adjacents.push(Coordinate(coordinate.0 + 1, coordinate.1));
+        }
+
+        if coordinate.1 < self.col_len() - 1 {
+            adjacents.push(Coordinate(coordinate.0, coordinate.1 + 1));
+        }
+
+        adjacents
+    }
 }
