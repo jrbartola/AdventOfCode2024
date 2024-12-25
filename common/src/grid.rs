@@ -22,6 +22,15 @@ impl Grid<char> {
                 .collect(),
         }
     }
+
+    pub fn print(&self) -> () {
+        for row in &self.cells {
+            for cell in row {
+                print!("{}", cell);
+            }
+            println!();
+        }
+    }
 }
 
 impl<T: PartialEq<T>> Grid<T> {
