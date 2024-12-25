@@ -8,6 +8,7 @@ pub enum GridDirection {
     Right,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Grid<T> {
     cells: Vec<Vec<T>>,
 }
@@ -24,6 +25,12 @@ impl Grid<char> {
 }
 
 impl<T: PartialEq<T>> Grid<T> {
+    pub fn empty<V: Clone>(row_len: usize, col_len: usize, default_value: V) -> Grid<V> {
+        Grid {
+            cells: vec![vec![default_value; col_len]; row_len],
+        }
+    }
+
     pub fn from_generic(lines: &Vec<String>, collector: impl Fn(char) -> T) -> Grid<T> {
         Grid {
             cells: lines
@@ -49,6 +56,16 @@ impl<T: PartialEq<T>> Grid<T> {
         }
 
         Some(&self.cells[*row][*col])
+    }
+
+    pub fn get_mut(&mut self, coordinate: &Coordinate) -> Option<&mut T> {
+        let Coordinate(row, col) = coordinate;
+
+        if !self.is_in_bounds(coordinate) {
+            return None;
+        }
+
+        Some(&mut self.cells[*row][*col])
     }
 
     pub fn set(&mut self, coordinate: &Coordinate, value: T) {
