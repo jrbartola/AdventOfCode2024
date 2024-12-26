@@ -1,6 +1,6 @@
 use std::ops::Add;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Ord, PartialOrd)]
 pub struct Coordinate(pub usize, pub usize);
 
 impl Add for Coordinate {

@@ -8,6 +8,26 @@ pub enum GridDirection {
     Right,
 }
 
+impl GridDirection {
+    pub fn turn_clockwise(&self) -> GridDirection {
+        match self {
+            GridDirection::Up => GridDirection::Right,
+            GridDirection::Right => GridDirection::Down,
+            GridDirection::Down => GridDirection::Left,
+            GridDirection::Left => GridDirection::Up,
+        }
+    }
+
+    pub fn turn_counter_clockwise(&self) -> GridDirection {
+        match self {
+            GridDirection::Up => GridDirection::Left,
+            GridDirection::Left => GridDirection::Down,
+            GridDirection::Down => GridDirection::Right,
+            GridDirection::Right => GridDirection::Up,
+        }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Grid<T> {
     cells: Vec<Vec<T>>,
@@ -123,19 +143,23 @@ impl<T: PartialEq<T>> Grid<T> {
     pub fn get_adjacent(&self, coordinate: &Coordinate) -> Vec<Coordinate> {
         let mut adjacents = Vec::new();
 
+        // Top
         if coordinate.0 > 0 {
             adjacents.push(Coordinate(coordinate.0 - 1, coordinate.1));
         }
 
+        // Left
         if coordinate.1 > 0 {
             adjacents.push(Coordinate(coordinate.0, coordinate.1 - 1));
         }
 
-        if coordinate.0 < self.row_len() - 1 {
+        // Bottom
+        if self.row_len() > 0 && coordinate.0 < self.row_len() - 1 {
             adjacents.push(Coordinate(coordinate.0 + 1, coordinate.1));
         }
 
-        if coordinate.1 < self.col_len() - 1 {
+        // Right
+        if self.col_len() > 0 && coordinate.1 < self.col_len() - 1 {
             adjacents.push(Coordinate(coordinate.0, coordinate.1 + 1));
         }
 
